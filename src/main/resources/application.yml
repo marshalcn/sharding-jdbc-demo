@@ -1,0 +1,52 @@
+server:
+  port: 8080
+spring:
+  shardingsphere:
+    datasource:
+      ds0:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://rm.mysql.rds.aliyuncs.com:3306/shard?characterEncoding=utf8
+        password: Snailmotivate_
+        type: com.zaxxer.hikari.HikariDataSource
+        username: root
+      ds1:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://rm.mysql.rds.aliyuncs.com:3306/shard2?characterEncoding=utf8
+        password: Snailmotivate_
+        type: com.zaxxer.hikari.HikariDataSource
+        username: root
+      names: ds0,ds1
+    props:
+      sql:
+        show: true
+    sharding:
+      default-database-strategy:
+        inline:
+          algorithm-expression: ds$->{id % 2}
+          sharding-column: id
+#        standard:
+#          range-algorithm-class-name: org.example.util.RangeQueryShardingAlgorithm
+#          sharding-column: create_time
+      tables:
+        t_bill:
+          actual-data-nodes: ds$->{0..1}.t_bill_$->{2021..2021}_$->{1..12}
+          database-strategy:
+            standard:
+              precise-algorithm-class-name: org.example.util.DBShardingAlgorithm
+              sharding-column: order_id
+          key-generator:
+            column: order_id
+            props:
+              worker:
+                id: 123
+            type: SNOWFLAKE
+          table-strategy:
+            standard:
+              precise-algorithm-class-name: org.example.util.TableShardingAlgorithm
+              range-algorithm-class-name: org.example.util.RangeQueryShardingAlgorithm
+              sharding-column: create_time
+#      default-table-strategy:
+#        standard:
+#          range-algorithm-class-name: org.example.util.RangeQueryShardingAlgorithm
+#          precise-algorithm-class-name: org.example.util.TableShardingAlgorithm
+#          sharding-column: create_time

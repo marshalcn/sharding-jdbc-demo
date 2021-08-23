@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--命名空间 确定方法所在的类-->
+<mapper namespace="org.example.mapper.BillMapper">
+    <!-- id 必须与所在类的方法名一致-->
+    <!-- resultType 封装的位置-->
+    <select id="findPage" resultType="org.example.entity.Bill">
+        SELECT * FROM t_bill
+    </select>
+    <select id="findBillPage" resultType="org.example.entity.Bill">
+        SELECT * FROM t_bill
+    </select>
+</mapper>
